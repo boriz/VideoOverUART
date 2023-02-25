@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+/VideoSenderDotNET/bin/
+/VideoSenderDotNET/.vs/
+/VideoSenderDotNET/FastSerial/x64
+/VideoSenderDotNET/obj/
