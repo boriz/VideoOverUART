@@ -34,3 +34,5 @@
 /VideoSenderDotNET/.vs/
 /VideoSenderDotNET/FastSerial/x64
 /VideoSenderDotNET/obj/
+/rp2040_Firmware/build/
+/VideoSenderDotNET/packages/
