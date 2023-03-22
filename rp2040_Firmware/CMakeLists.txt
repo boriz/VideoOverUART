@@ -12,7 +12,7 @@ pico_sdk_init()
 add_executable(video main.c ssd1306.c)
 
 pico_enable_stdio_usb(video 1)
-pico_enable_stdio_uart(video 1)
+# pico_enable_stdio_uart(video 1)
 pico_add_extra_outputs(video)
 
 target_link_libraries(video pico_stdlib hardware_i2c pico_multicore)

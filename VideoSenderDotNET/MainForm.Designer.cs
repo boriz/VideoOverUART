@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.pb_mono = new System.Windows.Forms.PictureBox();
 			this.fd_OpenFile = new System.Windows.Forms.OpenFileDialog();
 			this.pb_scaled = new System.Windows.Forms.PictureBox();
@@ -45,6 +46,9 @@
 			this.btn_Pause = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
 			this.tb_Log = new System.Windows.Forms.TextBox();
+			this.tmr_Stat = new System.Windows.Forms.Timer(this.components);
+			this.chk_Capture = new System.Windows.Forms.CheckBox();
+			this.label6 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pb_mono)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb_scaled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb_src)).BeginInit();
@@ -53,6 +57,7 @@
 			// 
 			// pb_mono
 			// 
+			this.pb_mono.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pb_mono.Location = new System.Drawing.Point(518, 318);
 			this.pb_mono.Name = "pb_mono";
 			this.pb_mono.Size = new System.Drawing.Size(128, 64);
@@ -67,6 +72,7 @@
 			// 
 			// pb_scaled
 			// 
+			this.pb_scaled.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pb_scaled.Location = new System.Drawing.Point(518, 22);
 			this.pb_scaled.Name = "pb_scaled";
 			this.pb_scaled.Size = new System.Drawing.Size(128, 64);
@@ -75,6 +81,7 @@
 			// 
 			// pb_src
 			// 
+			this.pb_src.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pb_src.Location = new System.Drawing.Point(13, 22);
 			this.pb_src.Name = "pb_src";
 			this.pb_src.Size = new System.Drawing.Size(480, 360);
@@ -83,6 +90,7 @@
 			// 
 			// pb_gray
 			// 
+			this.pb_gray.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pb_gray.Location = new System.Drawing.Point(518, 165);
 			this.pb_gray.Name = "pb_gray";
 			this.pb_gray.Size = new System.Drawing.Size(128, 64);
@@ -129,7 +137,7 @@
 			// 
 			this.btn_OpenFile.Location = new System.Drawing.Point(682, 22);
 			this.btn_OpenFile.Name = "btn_OpenFile";
-			this.btn_OpenFile.Size = new System.Drawing.Size(75, 23);
+			this.btn_OpenFile.Size = new System.Drawing.Size(158, 23);
 			this.btn_OpenFile.TabIndex = 8;
 			this.btn_OpenFile.Text = "Open File";
 			this.btn_OpenFile.UseVisualStyleBackColor = true;
@@ -137,7 +145,7 @@
 			// 
 			// btn_Play
 			// 
-			this.btn_Play.Location = new System.Drawing.Point(682, 139);
+			this.btn_Play.Location = new System.Drawing.Point(682, 149);
 			this.btn_Play.Name = "btn_Play";
 			this.btn_Play.Size = new System.Drawing.Size(75, 23);
 			this.btn_Play.TabIndex = 9;
@@ -147,7 +155,7 @@
 			// 
 			// btn_Stop
 			// 
-			this.btn_Stop.Location = new System.Drawing.Point(682, 179);
+			this.btn_Stop.Location = new System.Drawing.Point(765, 149);
 			this.btn_Stop.Name = "btn_Stop";
 			this.btn_Stop.Size = new System.Drawing.Size(75, 23);
 			this.btn_Stop.TabIndex = 10;
@@ -158,7 +166,7 @@
 			// cmb_ComPort
 			// 
 			this.cmb_ComPort.FormattingEnabled = true;
-			this.cmb_ComPort.Location = new System.Drawing.Point(682, 83);
+			this.cmb_ComPort.Location = new System.Drawing.Point(682, 102);
 			this.cmb_ComPort.Name = "cmb_ComPort";
 			this.cmb_ComPort.Size = new System.Drawing.Size(158, 21);
 			this.cmb_ComPort.TabIndex = 11;
@@ -175,7 +183,7 @@
 			// 
 			// btn_Pause
 			// 
-			this.btn_Pause.Location = new System.Drawing.Point(765, 139);
+			this.btn_Pause.Location = new System.Drawing.Point(682, 178);
 			this.btn_Pause.Name = "btn_Pause";
 			this.btn_Pause.Size = new System.Drawing.Size(75, 23);
 			this.btn_Pause.TabIndex = 14;
@@ -186,7 +194,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(682, 67);
+			this.label5.Location = new System.Drawing.Point(682, 86);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(53, 13);
 			this.label5.TabIndex = 15;
@@ -194,12 +202,37 @@
 			// 
 			// tb_Log
 			// 
-			this.tb_Log.Location = new System.Drawing.Point(685, 221);
+			this.tb_Log.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.tb_Log.Location = new System.Drawing.Point(682, 238);
 			this.tb_Log.Multiline = true;
 			this.tb_Log.Name = "tb_Log";
 			this.tb_Log.ReadOnly = true;
-			this.tb_Log.Size = new System.Drawing.Size(155, 113);
+			this.tb_Log.Size = new System.Drawing.Size(158, 94);
 			this.tb_Log.TabIndex = 16;
+			// 
+			// tmr_Stat
+			// 
+			this.tmr_Stat.Interval = 1000;
+			this.tmr_Stat.Tick += new System.EventHandler(this.tmr_Stat_Tick);
+			// 
+			// chk_Capture
+			// 
+			this.chk_Capture.AutoSize = true;
+			this.chk_Capture.Location = new System.Drawing.Point(685, 51);
+			this.chk_Capture.Name = "chk_Capture";
+			this.chk_Capture.Size = new System.Drawing.Size(152, 17);
+			this.chk_Capture.TabIndex = 17;
+			this.chk_Capture.Text = "Use Video Capture Device";
+			this.chk_Capture.UseVisualStyleBackColor = true;
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(679, 222);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(31, 13);
+			this.label6.TabIndex = 18;
+			this.label6.Text = "Stats";
 			// 
 			// MainForm
 			// 
@@ -207,6 +240,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(883, 400);
 			this.ControlBox = false;
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.chk_Capture);
 			this.Controls.Add(this.tb_Log);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.btn_Pause);
@@ -227,7 +262,7 @@
 			this.MinimizeBox = false;
 			this.Name = "MainForm";
 			this.ShowIcon = false;
-			this.Text = "Video Test";
+			this.Text = "Video Test - OLED 128x64";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.pb_mono)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb_scaled)).EndInit();
@@ -257,6 +292,9 @@
 		private System.Windows.Forms.Button btn_Pause;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox tb_Log;
+		private System.Windows.Forms.Timer tmr_Stat;
+		private System.Windows.Forms.CheckBox chk_Capture;
+		private System.Windows.Forms.Label label6;
 	}
 }
 
