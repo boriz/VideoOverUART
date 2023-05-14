@@ -10,12 +10,11 @@
 
 #include "ssd1306.h"
 
-
 //#define PICO_DEFAULT_UART_BAUD_RATE 921600
 //#define CFG_TUD_CDC_EP_BUFSIZE 1024 
 //#define CFG_TUD_CDC_RX_BUFSIZE 1024
 //#define CFG_TUD_CDC_TX_BUFSIZE 1024
-#define UART_ID uart0
+//#define UART_ID uart0
 #define I2C_ID i2c1
 
 void UartLoop();
@@ -86,18 +85,11 @@ int main ()
 
 void UartLoop()
 {
-    // Configure UART
-    uart_init(UART_ID, 460800);
-    gpio_set_function(0, GPIO_FUNC_UART);   // UART0 TX
-    gpio_set_function(1, GPIO_FUNC_UART);   // UART0 RX
-    uart_set_hw_flow(UART_ID, false, false);
-    uart_set_format(UART_ID, 8, 1, UART_PARITY_NONE);
-    uart_set_fifo_enabled(UART_ID, true);
-
     // Other variables
     bool special_char = false;
     uint8_t* p_buff = malloc(buf_size);
     int draw_index = 0;
+    printf("Starting main UART loop \n");
     
     while (true)
     {
@@ -105,14 +97,14 @@ void UartLoop()
         uint8_t new_serial_byte;
 
         // Exit if on more charcters
-        if (!uart_is_readable(UART_ID))
+        int c = getchar_timeout_us(1);        
+        if (c == PICO_ERROR_TIMEOUT)
         {
             continue;
         }
 
         // Got new character
-        new_serial_byte = uart_getc(UART_ID);
-        //printf("C: 0x%02X \n", new_serial_byte);
+        new_serial_byte = (c & 0xFF);        
 
         // Receive special char
         if (new_serial_byte == 0x69 && !special_char)
@@ -122,6 +114,7 @@ void UartLoop()
             special_char = true;
             continue;
         }
+        //printf("C: 0x%02X \n", new_serial_byte);
 
         // Are we expecting a special command?
         if (special_char)
