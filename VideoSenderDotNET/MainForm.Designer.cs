@@ -58,9 +58,9 @@
 			// pb_mono
 			// 
 			this.pb_mono.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pb_mono.Location = new System.Drawing.Point(518, 318);
+			this.pb_mono.Location = new System.Drawing.Point(665, 254);
 			this.pb_mono.Name = "pb_mono";
-			this.pb_mono.Size = new System.Drawing.Size(128, 64);
+			this.pb_mono.Size = new System.Drawing.Size(128, 128);
 			this.pb_mono.TabIndex = 0;
 			this.pb_mono.TabStop = false;
 			// 
@@ -73,9 +73,9 @@
 			// pb_scaled
 			// 
 			this.pb_scaled.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pb_scaled.Location = new System.Drawing.Point(518, 22);
+			this.pb_scaled.Location = new System.Drawing.Point(516, 22);
 			this.pb_scaled.Name = "pb_scaled";
-			this.pb_scaled.Size = new System.Drawing.Size(128, 64);
+			this.pb_scaled.Size = new System.Drawing.Size(128, 128);
 			this.pb_scaled.TabIndex = 1;
 			this.pb_scaled.TabStop = false;
 			// 
@@ -91,9 +91,9 @@
 			// pb_gray
 			// 
 			this.pb_gray.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pb_gray.Location = new System.Drawing.Point(518, 165);
+			this.pb_gray.Location = new System.Drawing.Point(665, 22);
 			this.pb_gray.Name = "pb_gray";
-			this.pb_gray.Size = new System.Drawing.Size(128, 64);
+			this.pb_gray.Size = new System.Drawing.Size(128, 128);
 			this.pb_gray.TabIndex = 3;
 			this.pb_gray.TabStop = false;
 			// 
@@ -109,7 +109,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(515, 6);
+			this.label2.Location = new System.Drawing.Point(513, 6);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(45, 13);
 			this.label2.TabIndex = 5;
@@ -118,7 +118,7 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(515, 149);
+			this.label3.Location = new System.Drawing.Point(662, 6);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(54, 13);
 			this.label3.TabIndex = 6;
@@ -127,15 +127,15 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(515, 302);
+			this.label4.Location = new System.Drawing.Point(662, 225);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(69, 13);
+			this.label4.Size = new System.Drawing.Size(69, 26);
 			this.label4.TabIndex = 7;
-			this.label4.Text = "Monochrome";
+			this.label4.Text = "Monochrome\r\nTo UART";
 			// 
 			// btn_OpenFile
 			// 
-			this.btn_OpenFile.Location = new System.Drawing.Point(682, 22);
+			this.btn_OpenFile.Location = new System.Drawing.Point(834, 19);
 			this.btn_OpenFile.Name = "btn_OpenFile";
 			this.btn_OpenFile.Size = new System.Drawing.Size(158, 23);
 			this.btn_OpenFile.TabIndex = 8;
@@ -145,7 +145,7 @@
 			// 
 			// btn_Play
 			// 
-			this.btn_Play.Location = new System.Drawing.Point(682, 149);
+			this.btn_Play.Location = new System.Drawing.Point(834, 127);
 			this.btn_Play.Name = "btn_Play";
 			this.btn_Play.Size = new System.Drawing.Size(75, 23);
 			this.btn_Play.TabIndex = 9;
@@ -155,7 +155,7 @@
 			// 
 			// btn_Stop
 			// 
-			this.btn_Stop.Location = new System.Drawing.Point(765, 149);
+			this.btn_Stop.Location = new System.Drawing.Point(917, 127);
 			this.btn_Stop.Name = "btn_Stop";
 			this.btn_Stop.Size = new System.Drawing.Size(75, 23);
 			this.btn_Stop.TabIndex = 10;
@@ -166,14 +166,15 @@
 			// cmb_ComPort
 			// 
 			this.cmb_ComPort.FormattingEnabled = true;
-			this.cmb_ComPort.Location = new System.Drawing.Point(682, 102);
+			this.cmb_ComPort.Location = new System.Drawing.Point(834, 92);
+			this.cmb_ComPort.MaxDropDownItems = 12;
 			this.cmb_ComPort.Name = "cmb_ComPort";
 			this.cmb_ComPort.Size = new System.Drawing.Size(158, 21);
 			this.cmb_ComPort.TabIndex = 11;
 			// 
 			// btn_Exit
 			// 
-			this.btn_Exit.Location = new System.Drawing.Point(765, 365);
+			this.btn_Exit.Location = new System.Drawing.Point(917, 366);
 			this.btn_Exit.Name = "btn_Exit";
 			this.btn_Exit.Size = new System.Drawing.Size(75, 23);
 			this.btn_Exit.TabIndex = 13;
@@ -183,7 +184,7 @@
 			// 
 			// btn_Pause
 			// 
-			this.btn_Pause.Location = new System.Drawing.Point(682, 178);
+			this.btn_Pause.Location = new System.Drawing.Point(834, 156);
 			this.btn_Pause.Name = "btn_Pause";
 			this.btn_Pause.Size = new System.Drawing.Size(75, 23);
 			this.btn_Pause.TabIndex = 14;
@@ -194,7 +195,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(682, 86);
+			this.label5.Location = new System.Drawing.Point(834, 76);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(53, 13);
 			this.label5.TabIndex = 15;
@@ -203,11 +204,11 @@
 			// tb_Log
 			// 
 			this.tb_Log.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tb_Log.Location = new System.Drawing.Point(682, 238);
+			this.tb_Log.Location = new System.Drawing.Point(834, 205);
 			this.tb_Log.Multiline = true;
 			this.tb_Log.Name = "tb_Log";
 			this.tb_Log.ReadOnly = true;
-			this.tb_Log.Size = new System.Drawing.Size(158, 94);
+			this.tb_Log.Size = new System.Drawing.Size(158, 155);
 			this.tb_Log.TabIndex = 16;
 			// 
 			// tmr_Stat
@@ -218,7 +219,7 @@
 			// chk_Capture
 			// 
 			this.chk_Capture.AutoSize = true;
-			this.chk_Capture.Location = new System.Drawing.Point(685, 51);
+			this.chk_Capture.Location = new System.Drawing.Point(837, 48);
 			this.chk_Capture.Name = "chk_Capture";
 			this.chk_Capture.Size = new System.Drawing.Size(152, 17);
 			this.chk_Capture.TabIndex = 17;
@@ -228,7 +229,7 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(679, 222);
+			this.label6.Location = new System.Drawing.Point(831, 189);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(31, 13);
 			this.label6.TabIndex = 18;
@@ -238,7 +239,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(883, 400);
+			this.ClientSize = new System.Drawing.Size(1004, 401);
 			this.ControlBox = false;
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.chk_Capture);
@@ -258,6 +259,7 @@
 			this.Controls.Add(this.pb_src);
 			this.Controls.Add(this.pb_scaled);
 			this.Controls.Add(this.pb_mono);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "MainForm";

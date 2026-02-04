@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
@@ -8,27 +7,31 @@ using System.Threading;
 using System.Windows.Forms;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using System.Runtime.InteropServices;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Text;
 
 
 namespace VideoTest
 {
 	public partial class MainForm : Form
 	{
+		private const int ResizedWidth = 128;
+		private const int ResizedHeight = 128;
 		private Thread _video_thread;
 		private Thread _com_thread;
 		private ConcurrentQueue<Mat> _bmp_queue = new ConcurrentQueue<Mat>();
 		private string _file = @"..\..\..\test.mp4";
 		private volatile bool _exit_threads = false;
 		private volatile bool _pause = false;
+		private dynamic _audio_player;
+		private SerialPort _ser_port;
 
 		// Variables to calculate statistic
 		private volatile float _fps_requested = 0;
 		private volatile int _fps_capture = 0;
 		private volatile int _fps_send = 0;
 		private volatile int _frame_missed = 0;
+		private long _total_frames = 0;
+		private long _frames_played = 0;
 
 
 		public MainForm()
@@ -39,6 +42,12 @@ namespace VideoTest
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			this.Text = $"Video Test - OLED {ResizedWidth}x{ResizedHeight}";
+			var resizedSize = new System.Drawing.Size(ResizedWidth, ResizedHeight);
+			pb_scaled.Size = resizedSize;
+			pb_gray.Size = resizedSize;
+			pb_mono.Size = resizedSize;
+
 			string[] ports = SerialPort.GetPortNames();
 			cmb_ComPort.Items.Clear();
 			cmb_ComPort.Items.AddRange(ports);
@@ -69,6 +78,14 @@ namespace VideoTest
 			var image_mono = new Mat();
 			Bitmap bmp;
 			_fps_requested = (float) cap.Fps;
+			if (chk_Capture.Checked)
+			{
+				_total_frames = 0;
+			}
+			else
+			{
+				_total_frames = cap.FrameCount;
+			}
 			float frame_time_requested = 1000/ _fps_requested;
 			Stopwatch sw_frame_time = new Stopwatch();
 			Stopwatch sw_delay = new Stopwatch();
@@ -95,8 +112,9 @@ namespace VideoTest
 				bmp = BitmapConverter.ToBitmap(image);
 				pb_src.Image = bmp;
 
-				// Resize image to 128x64
-				image_resize = image.Resize(new OpenCvSharp.Size(128, 64));
+				// Resize image to configured size
+				// image_resize = image.Resize(new OpenCvSharp.Size(ResizedWidth, ResizedHeight));
+				image_resize = image.Resize(new OpenCvSharp.Size(ResizedWidth, ResizedHeight), 0, 0, InterpolationFlags.Area);
 				bmp = BitmapConverter.ToBitmap(image_resize);
 				pb_scaled.Image = bmp;
 
@@ -136,10 +154,11 @@ namespace VideoTest
 
 			// Open serial port
 			Mat mat_image;
-			SerialPort ser_port = new SerialPort(com_port, 460800, Parity.None, 8, StopBits.One);
-			ser_port.Handshake = Handshake.None;
-			ser_port.DtrEnable = true;
-			ser_port.Open();
+			_ser_port = new SerialPort(com_port, 460800, Parity.None, 8, StopBits.One);
+			//_ser_port = new SerialPort(com_port, 921600, Parity.None, 8, StopBits.One);
+			_ser_port.Handshake = Handshake.None;
+			_ser_port.DtrEnable = true;
+			_ser_port.Open();
 
 			// Stopwatches for statistic
 			Stopwatch sw_send = new Stopwatch();
@@ -197,16 +216,18 @@ namespace VideoTest
 					}
 				}
 				sw_send.Restart();
-				ser_port.Write(send_array, 0, send_index);
+				_ser_port.Write(send_array, 0, send_index);
 				sw_send.Stop();
 				sw_frame.Stop();
 				// Debug.WriteLine("Frame time: {0}ms; Send time {1}ms", sw_frame.ElapsedMilliseconds, sw_send.ElapsedMilliseconds);
 
 				// Update statistic
 				_fps_send++;
+				_frames_played++;
 			}
 			// Exit thread
-			ser_port.Close();
+			_ser_port.Close();
+			_ser_port = null;
 		}
 
 
@@ -229,6 +250,7 @@ namespace VideoTest
 
 			// Unpause 
 			_pause = false;
+			StopAudio();
 
 			// Flag to exit from threads
 			_exit_threads = true;
@@ -258,11 +280,13 @@ namespace VideoTest
 			if (_pause)
 			{
 				_pause = false;
+				ResumeAudio();
 				return;
 			}
 
 			// Start threads
 			_exit_threads = false;
+			StartAudio();
 
 			if (_video_thread == null)
 			{
@@ -281,6 +305,7 @@ namespace VideoTest
 		private void btn_Exit_Click(object sender, EventArgs e)
 		{
 			_exit_threads = true;
+			StopAudio();
 
 			if (_video_thread != null)
 			{
@@ -303,6 +328,7 @@ namespace VideoTest
 			btn_Pause.Enabled = false;
 
 			_pause = true;
+			PauseAudio();
 		}
 
 
@@ -313,11 +339,88 @@ namespace VideoTest
 				"Target FPS: {1:0.00}" + Environment.NewLine +
 				"FPS capture: {2}" + Environment.NewLine + 
 				"FPS send: {3}" + Environment.NewLine + 
-				"Missed frames: {4}", _file, _fps_requested, _fps_capture, _fps_send, _frame_missed);
+				"Missed frames: {4}" + Environment.NewLine + Environment.NewLine +
+				"Total frames: {5}" + Environment.NewLine +
+				"Frames played: {6}",
+				_file, _fps_requested, _fps_capture, _fps_send, _frame_missed, _total_frames, _frames_played);
+			if (_total_frames > 1)
+			{
+				float play_progress = ((float)_frames_played / (float)_total_frames) * 100;
+				tb_Log.Text += String.Format(Environment.NewLine + "Play progress: {0:0.00} %", play_progress);
+			}
 
 			// Restart fps calculation
 			_fps_capture = 0;
 			_fps_send = 0;
+
+			// Poll UART RX and log to debug console
+			if (_ser_port != null && _ser_port.IsOpen)
+			{
+				try
+				{
+					int bytes_available = _ser_port.BytesToRead;
+					if (bytes_available > 0)
+					{
+						byte[] rx_buffer = new byte[bytes_available];
+						int bytes_read = _ser_port.Read(rx_buffer, 0, bytes_available);
+						if (bytes_read > 0)
+						{
+							Debug.WriteLine(Encoding.ASCII.GetString(rx_buffer, 0, bytes_read));
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("UART RX error: {0}", ex.Message);
+				}
+			}
+		}
+
+		private void StartAudio()
+		{
+			if (chk_Capture.Checked)
+			{
+				return;
+			}
+
+			if (_audio_player == null)
+			{
+				_audio_player = Activator.CreateInstance(Type.GetTypeFromProgID("WMPlayer.OCX"));
+				_audio_player.settings.autoStart = true;
+			}
+
+			_audio_player.URL = System.IO.Path.GetFullPath(_file);
+			_audio_player.controls.play();
+		}
+
+		private void PauseAudio()
+		{
+			if (_audio_player == null)
+			{
+				return;
+			}
+
+			_audio_player.controls.pause();
+		}
+
+		private void ResumeAudio()
+		{
+			if (_audio_player == null)
+			{
+				return;
+			}
+
+			_audio_player.controls.play();
+		}
+
+		private void StopAudio()
+		{
+			if (_audio_player == null)
+			{
+				return;
+			}
+
+			_audio_player.controls.stop();
 		}
 	}
 }
