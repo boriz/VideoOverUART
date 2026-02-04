@@ -125,7 +125,10 @@ namespace VideoTest
 
 				// Apply thershold to convert grayscale to monochome 
 				double th = image_gray.Mean().Val0;
-				image_mono = image_gray.Threshold(th, 255, ThresholdTypes.Binary);
+				//image_mono = image_gray.Threshold(th, 255, ThresholdTypes.Binary);
+
+				// Detect edges and use that as monochrome frame
+				Cv2.Canny(image_gray, image_mono, th, th * 2.0);
 
 				// Copy and send the image to serial port thread
 				Mat mat_copy = image_mono.Clone();
